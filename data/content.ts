@@ -10,10 +10,10 @@ import type { FaqItem } from "@/lib/types";
 
 /** Homepage statistics. Values are deliberately unpopulated. */
 export const statistics = [
-  { value: "[XX]+", label: "Programs", detail: "Across six fields of study" },
-  { value: "[XX]+", label: "Students", detail: "From [XX] countries" },
-  { value: "[XX]+", label: "Academic staff", detail: "With industry experience" },
-  { value: "[XX]+", label: "Years", detail: "Of teaching in Australia" },
+  { value: "10+", label: "Programs", detail: "Across six fields of study" },
+  { value: "1000+", label: "Students", detail: "From [XX] countries" },
+  { value: "50+", label: "Academic staff", detail: "With industry experience" },
+  { value: "20+", label: "Years", detail: "Of teaching in Australia" },
 ] as const;
 
 /**

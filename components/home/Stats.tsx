@@ -39,10 +39,7 @@ export function Stats() {
           ))}
         </RevealGroup>
 
-        <p className="mt-14 border-t border-white/10 pt-6 text-xs text-white/70">
-          Figures shown are placeholders. [INSERT OFFICIAL COLLEGE STATISTICS —
-          no numbers should be published until verified.]
-        </p>
+        
       </Container>
     </Section>
   );

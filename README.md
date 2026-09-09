@@ -12,19 +12,25 @@ files under `data/`.
 Two things must be dealt with. Both are deliberate, and both are visible in the
 running site rather than hidden in the code.
 
-### 1. The college logo is missing
+### 1. The college logo
 
-The brief specifies the official emblem at `public/logo.png`. **That file was
-not present in the project**, so the header and footer currently render a
-typographic wordmark of the college name instead. No substitute emblem has been
-designed or invented.
+`public/logo.png` is the real supplied emblem (580×600px, crest + "PRIME
+INTERNATIONAL COLLEGE AUSTRALIA" lockup) — `lib/brand-asset.ts` detected it at
+build time and the header, footer, mobile menu and social share images all
+switched over from the typographic fallback automatically. Its real pixel
+dimensions are set in `lib/brand.ts` (`logoIntrinsic`) so `next/image` renders
+it at the correct aspect ratio.
 
-**To fix:** drop the supplied `logo.png` into `public/`. Nothing else needs to
-change — `lib/brand-asset.ts` detects the file at build time and switches the
-header, footer and social share images over automatically. The logo is rendered
-at a fixed height with automatic width, so its proportions and colour are never
-altered. For the sharpest output, set the real pixel dimensions in
-`lib/brand.ts`.
+**One thing to know about how it's displayed**: the logo's "PRIME" wordmark
+and crest linework are painted in a navy essentially identical to this site's
+own `--color-navy` token. That's correct on light backgrounds (the header),
+but placed directly on the navy footer or the navy mobile menu it would go
+navy-on-navy and mostly disappear. Recolouring the supplied file isn't an
+option per the brief, and no reversed/white variant was supplied, so
+`components/layout/Logo.tsx` gives the mark a small white plate whenever it's
+used with `tone="light"` (i.e. on a dark surface) — the logo file itself stays
+untouched pixel-for-pixel. If a proper reversed/white logo variant is ever
+supplied, swap it in per-tone instead and retire the plate.
 
 ### 2. Content is placeholder and marked as such
 

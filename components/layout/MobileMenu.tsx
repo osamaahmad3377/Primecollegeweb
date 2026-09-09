@@ -126,7 +126,7 @@ export function MobileMenu({
           transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
         >
           <div className="flex h-[var(--header-h)] shrink-0 items-center justify-between border-b border-white/10 px-5 sm:px-10">
-            <Logo src={logoSrc} tone="light" className="h-9" asLink={false} />
+            <Logo src={logoSrc} tone="light" className="h-12" asLink={false} />
             <button
               type="button"
               onClick={onClose}

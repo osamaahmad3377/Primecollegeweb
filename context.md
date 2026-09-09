@@ -228,11 +228,28 @@ Nothing has been invented about: accreditation, CRICOS/RTO registration, AQF
 levels, course approvals, rankings, student numbers, campus location,
 partnerships, awards, or named students. Specifically:
 
-- **`public/logo.png` does not exist.** The brief specified this file as the
-  official emblem; it was never supplied. The header/footer currently render
-  a typographic "PRIME" wordmark fallback (`lib/brand-asset.ts` detects the
-  file's absence and switches automatically — no code change needed once the
-  real file is dropped in).
+- **`public/logo.png` now exists** — the client supplied the real crest
+  (580×600px PNG, RGBA/transparent). `lib/brand-asset.ts` detected it and the
+  header/footer/mobile menu switched automatically from the typographic
+  fallback to the real mark; no code change was needed for that part.
+  `lib/brand.ts`'s `logoIntrinsic` was updated from a guessed 720×220 (wide
+  wordmark shape) to the real 580×600 (near-square crest) — this matters
+  because next/image uses it to compute the correct aspect ratio.
+
+  **Real bug found and fixed**: the logo's "PRIME" wordmark and crest
+  linework are painted in a navy essentially identical to this site's own
+  navy token (`rgb(15,36,63)` at full opacity, sampled directly from the PNG,
+  vs `--color-navy` `#011E3E`). On light backgrounds (the header) that's
+  correct. Placed directly on the navy footer or the navy mobile menu, the
+  same artwork went navy-on-navy and became nearly invisible. Per the brief,
+  recolouring the supplied logo was never an option, and no reversed/white
+  variant was supplied. Fix: `Logo.tsx` now gives the mark a small white
+  plate whenever `tone="light"` (i.e. it's being placed on a dark surface) —
+  the logo file itself stays untouched pixel-for-pixel, it's just placed on
+  a background it can actually be read against. `tone="dark"` (light
+  surfaces, e.g. the header) renders it plain. If a proper reversed/white
+  logo variant is ever supplied, this plate can be retired in favour of
+  swapping the asset per-tone instead.
 - **`data/site.ts` → `regulatory`**: `rtoCode`, `cricosCode`, `abn` are all
   empty strings, intentionally. Never fill these with guessed values.
 - **`data/testimonials.ts`**: five illustrative quotes, all attributed to

@@ -8,7 +8,11 @@
 /**
  * Intrinsic dimensions passed to next/image for the logo. These are a layout
  * hint only — rendered size is controlled by CSS (fixed height, automatic
- * width), so a logo of any aspect ratio displays without distortion. Update
- * these to the real pixel dimensions of logo.png for the sharpest srcset.
+ * width), so a logo of any aspect ratio displays without distortion.
+ *
+ * Real dimensions of the supplied /public/logo.png (the crest — graduation
+ * cap, laurels, "PRIME INTERNATIONAL COLLEGE AUSTRALIA" lockup), confirmed
+ * via PIL. It is nearly square, not the wide horizontal wordmark shape this
+ * constant originally assumed — keep this in sync if the file is replaced.
  */
-export const logoIntrinsic = { width: 720, height: 220 } as const;
+export const logoIntrinsic = { width: 580, height: 600 } as const;

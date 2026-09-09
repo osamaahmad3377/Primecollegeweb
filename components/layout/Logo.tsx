@@ -18,8 +18,21 @@ interface LogoProps {
 /**
  * The college's primary brand mark.
  *
- * When logo.png is present it is rendered untouched at a fixed height with
- * automatic width, so its proportions and colour are always preserved.
+ * When logo.png is present it is rendered untouched — same proportions, same
+ * colour, per the brief ("do not recolour the logo"). But the supplied file
+ * is flat artwork: its "PRIME" wordmark and crest linework are painted in a
+ * navy essentially identical to this site's own navy (confirmed by sampling
+ * the PNG — rgb(15,36,63) at full opacity against `--color-navy` #011E3E).
+ * On a light background that's exactly right. Placed directly on a navy
+ * footer or the navy mobile menu, that same artwork goes navy-on-navy and
+ * most of it disappears.
+ *
+ * Recolouring the file is off the table, and no reversed/white variant was
+ * supplied, so `tone="light"` (meaning: this instance sits on a dark surface)
+ * gives the mark a small white plate behind it — the logo itself is still
+ * untouched pixel-for-pixel, just placed on a background it can actually be
+ * read against. `tone="dark"` (light surfaces, e.g. the header) renders it
+ * plain, exactly as before.
  */
 export function Logo({
   src,
@@ -28,16 +41,40 @@ export function Logo({
   asLink = true,
   priority = false,
 }: LogoProps) {
+  const onDarkSurface = tone === "light";
+
   const mark = src ? (
-    <Image
-      src={src}
-      alt={`${site.name} logo`}
-      width={logoIntrinsic.width}
-      height={logoIntrinsic.height}
-      priority={priority}
-      className={cn("w-auto object-contain", className)}
-      sizes="220px"
-    />
+    onDarkSurface ? (
+      // The plate carries the height class; the image simply fills it.
+      <span
+        className={cn(
+          "inline-flex items-center bg-white p-1.5 sm:p-2",
+          className,
+        )}
+      >
+        <Image
+          src={src}
+          alt={`${site.name} logo`}
+          width={logoIntrinsic.width}
+          height={logoIntrinsic.height}
+          priority={priority}
+          className="h-full w-auto object-contain"
+          sizes="220px"
+        />
+      </span>
+    ) : (
+      // No wrapper needed on a light surface — the height class goes
+      // straight on the image, exactly as before this component changed.
+      <Image
+        src={src}
+        alt={`${site.name} logo`}
+        width={logoIntrinsic.width}
+        height={logoIntrinsic.height}
+        priority={priority}
+        className={cn("w-auto object-contain", className)}
+        sizes="220px"
+      />
+    )
   ) : (
     <Wordmark tone={tone} className={className} />
   );

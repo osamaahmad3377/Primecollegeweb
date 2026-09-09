@@ -18,7 +18,13 @@ const SOLID_AT = 24;
 /** Grace period so the panel survives the gap between trigger and panel. */
 const CLOSE_DELAY = 140;
 
-export function Header({ logoSrc }: { logoSrc: string | null }) {
+export function Header({
+  logoSrc,
+  logoLightSrc,
+}: {
+  logoSrc: string | null;
+  logoLightSrc?: string | null;
+}) {
   const [solid, setSolid] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [openKey, setOpenKey] = useState<string | null>(null);
@@ -336,6 +342,7 @@ export function Header({ logoSrc }: { logoSrc: string | null }) {
         open={mobileOpen}
         onClose={closeMobile}
         logoSrc={logoSrc}
+        logoLightSrc={logoLightSrc}
         triggerId={triggerId}
       />
     </>

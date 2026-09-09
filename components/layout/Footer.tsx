@@ -7,7 +7,13 @@ import { acknowledgement, site } from "@/data/site";
 
 const year = 2026;
 
-export function Footer({ logoSrc }: { logoSrc: string | null }) {
+export function Footer({
+  logoSrc,
+  logoLightSrc,
+}: {
+  logoSrc: string | null;
+  logoLightSrc?: string | null;
+}) {
   const { regulatory } = site;
   const hasRegulatory =
     regulatory.rtoCode || regulatory.cricosCode || regulatory.abn;
@@ -37,7 +43,12 @@ export function Footer({ logoSrc }: { logoSrc: string | null }) {
         <div className="grid gap-12 lg:grid-cols-12 lg:gap-8">
           {/* Identity */}
           <div className="lg:col-span-4">
-            <Logo src={logoSrc} tone="light" className="h-16 lg:h-20 xl:h-24" />
+            <Logo
+              src={logoSrc}
+              lightSrc={logoLightSrc}
+              tone="light"
+              className="h-16 lg:h-20 xl:h-24"
+            />
             <p className="mt-6 max-w-[38ch] text-sm leading-relaxed text-navy-muted">
               {site.foundingStatement}
             </p>

@@ -228,28 +228,47 @@ Nothing has been invented about: accreditation, CRICOS/RTO registration, AQF
 levels, course approvals, rankings, student numbers, campus location,
 partnerships, awards, or named students. Specifically:
 
-- **`public/logo.png` now exists** — the client supplied the real crest
-  (580×600px PNG, RGBA/transparent). `lib/brand-asset.ts` detected it and the
-  header/footer/mobile menu switched automatically from the typographic
-  fallback to the real mark; no code change was needed for that part.
-  `lib/brand.ts`'s `logoIntrinsic` was updated from a guessed 720×220 (wide
-  wordmark shape) to the real 580×600 (near-square crest) — this matters
-  because next/image uses it to compute the correct aspect ratio.
+- **`public/logo.png` and `public/logo-light.png` both exist** — the client
+  supplied the real crest (580×600px, dark navy on transparent) and, later, a
+  reversed variant (579×600px, white/gold on transparent) purpose-built for
+  dark surfaces. `lib/brand-asset.ts` resolves both at build time;
+  `lib/brand.ts` holds each file's real dimensions (`logoIntrinsic` /
+  `logoLightIntrinsic`) so next/image renders each at its correct aspect
+  ratio — the original `logoIntrinsic` had been a guessed 720×220 (wide
+  wordmark shape) before the real file arrived, since fixed to 580×600
+  (near-square crest).
 
-  **Real bug found and fixed**: the logo's "PRIME" wordmark and crest
-  linework are painted in a navy essentially identical to this site's own
-  navy token (`rgb(15,36,63)` at full opacity, sampled directly from the PNG,
-  vs `--color-navy` `#011E3E`). On light backgrounds (the header) that's
-  correct. Placed directly on the navy footer or the navy mobile menu, the
-  same artwork went navy-on-navy and became nearly invisible. Per the brief,
-  recolouring the supplied logo was never an option, and no reversed/white
-  variant was supplied. Fix: `Logo.tsx` now gives the mark a small white
-  plate whenever `tone="light"` (i.e. it's being placed on a dark surface) —
-  the logo file itself stays untouched pixel-for-pixel, it's just placed on
-  a background it can actually be read against. `tone="dark"` (light
-  surfaces, e.g. the header) renders it plain. If a proper reversed/white
-  logo variant is ever supplied, this plate can be retired in favour of
-  swapping the asset per-tone instead.
+  **Real bug found and fixed, twice**:
+  1. The primary logo's "PRIME" wordmark and crest linework are painted in a
+     navy essentially identical to this site's own navy token
+     (`rgb(15,36,63)` at full opacity, sampled directly from the PNG, vs
+     `--color-navy` `#011E3E`). Correct on the header; placed directly on the
+     navy footer or navy mobile menu it went navy-on-navy and nearly
+     disappeared. First fix: `Logo.tsx` placed the mark on a small white
+     plate on dark surfaces (`tone="light"`) — the file stayed untouched
+     pixel-for-pixel, just given a background it could be read against.
+  2. Once the client supplied `logo-light.png`, `Logo.tsx` was rewired to
+     prefer that reversed asset on dark surfaces instead — rendered plain,
+     no plate, matching how the primary mark renders on light surfaces. The
+     white-plate path is kept as a fallback (used only if `logo-light.png` is
+     ever absent) rather than deleted, so nothing breaks if that file is
+     removed later — but with both files present it is dead code; the
+     reversed asset is what actually renders. `tone="dark"` (the header)
+     is completely unaffected by any of this — always the primary mark,
+     plain, as from the start.
+  3. **Real bug found and fixed in verification, not the product**: the first
+     screenshot check of the reversed logo showed nothing rendered at all —
+     `naturalWidth: 0`, `complete: false` on the `<img>` element, despite the
+     file resolving fine via direct HTTP fetch. This was a test-timing
+     artifact, not a product bug: `next/image` lazy-loads non-priority images
+     via `IntersectionObserver`, and the first (cold-cache) request for a
+     freshly-resized variant took longer to generate than the fixed
+     `waitForTimeout` in the test script allowed. Re-tested with
+     `page.waitForFunction(() => img.complete && img.naturalWidth > 0)`
+     instead of a fixed delay, and it rendered correctly. **Lesson**: when
+     checking a lazy-loaded `next/image`, wait for actual decode completion,
+     not an arbitrary timeout — a screenshot taken too early will show a
+     false negative for something that works.
 - **`data/site.ts` → `regulatory`**: `rtoCode`, `cricosCode`, `abn` are all
   empty strings, intentionally. Never fill these with guessed values.
 - **`data/testimonials.ts`**: five illustrative quotes, all attributed to

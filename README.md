@@ -14,23 +14,31 @@ running site rather than hidden in the code.
 
 ### 1. The college logo
 
-`public/logo.png` is the real supplied emblem (580×600px, crest + "PRIME
-INTERNATIONAL COLLEGE AUSTRALIA" lockup) — `lib/brand-asset.ts` detected it at
-build time and the header, footer, mobile menu and social share images all
-switched over from the typographic fallback automatically. Its real pixel
-dimensions are set in `lib/brand.ts` (`logoIntrinsic`) so `next/image` renders
-it at the correct aspect ratio.
+Two files, both supplied by the client and used verbatim — neither is ever
+recoloured, redrawn or re-proportioned:
 
-**One thing to know about how it's displayed**: the logo's "PRIME" wordmark
-and crest linework are painted in a navy essentially identical to this site's
-own `--color-navy` token. That's correct on light backgrounds (the header),
-but placed directly on the navy footer or the navy mobile menu it would go
-navy-on-navy and mostly disappear. Recolouring the supplied file isn't an
-option per the brief, and no reversed/white variant was supplied, so
-`components/layout/Logo.tsx` gives the mark a small white plate whenever it's
-used with `tone="light"` (i.e. on a dark surface) — the logo file itself stays
-untouched pixel-for-pixel. If a proper reversed/white logo variant is ever
-supplied, swap it in per-tone instead and retire the plate.
+- **`public/logo.png`** — the primary emblem (580×600px, crest + "PRIME
+  INTERNATIONAL COLLEGE AUSTRALIA" lockup), dark navy on transparent. Used on
+  light surfaces (the header) and for social share images.
+- **`public/logo-light.png`** — a reversed variant (579×600px), white/gold on
+  transparent, supplied specifically for dark surfaces. Used on the footer
+  and the mobile menu.
+
+`lib/brand-asset.ts` resolves both at build time; `lib/brand.ts` holds each
+file's real pixel dimensions (`logoIntrinsic` / `logoLightIntrinsic`) so
+`next/image` renders each at the correct aspect ratio. `components/layout/Logo.tsx`
+picks between them via its `tone` prop — `tone="dark"` (light surfaces) always
+renders the primary mark; `tone="light"` (dark surfaces) prefers the reversed
+`logo-light.png`, rendered plain, no wrapper needed.
+
+**Why two files, and a fallback behind them**: the primary logo's "PRIME"
+wordmark and crest linework are painted in a navy essentially identical to
+this site's own `--color-navy` token — correct on the header, but placed
+directly on a navy footer it would go navy-on-navy and mostly disappear.
+`Logo.tsx` therefore falls back to placing the *primary* mark on a small white
+plate if `logo-light.png` is ever absent, so nothing breaks if that file is
+removed — but with both files present, the plate path is dead code; the
+reversed asset is what actually renders.
 
 ### 2. Content is placeholder and marked as such
 

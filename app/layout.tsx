@@ -3,7 +3,7 @@ import { Inter, JetBrains_Mono, Poppins } from "next/font/google";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { StickyActions } from "@/components/layout/StickyActions";
-import { logoSrc } from "@/lib/brand-asset";
+import { logoLightSrc, logoSrc } from "@/lib/brand-asset";
 import { JsonLd, organisationJsonLd, websiteJsonLd } from "@/lib/seo";
 import { site } from "@/data/site";
 import "./globals.css";
@@ -101,7 +101,7 @@ export default function RootLayout({
           Skip to main content
         </a>
 
-        <Header logoSrc={logoSrc} />
+        <Header logoSrc={logoSrc} logoLightSrc={logoLightSrc} />
 
         {/*
           The header is fixed and permanently opaque, so main is offset by its
@@ -115,7 +115,7 @@ export default function RootLayout({
           {children}
         </main>
 
-        <Footer logoSrc={logoSrc} />
+        <Footer logoSrc={logoSrc} logoLightSrc={logoLightSrc} />
 
         <StickyActions />
 

@@ -1,12 +1,18 @@
 import Image from "next/image";
 import Link from "next/link";
-import { logoIntrinsic } from "@/lib/brand";
+import { logoIntrinsic, logoLightIntrinsic } from "@/lib/brand";
 import { site } from "@/data/site";
 import { cn } from "@/lib/utils";
 
 interface LogoProps {
   /** Resolved at build time in app/layout.tsx. Null means no logo.png. */
   src: string | null;
+  /**
+   * Resolved at build time. A reversed variant supplied for placement on dark
+   * surfaces (the footer, the mobile menu) — optional, since the site must
+   * still degrade gracefully if it's ever removed.
+   */
+  lightSrc?: string | null;
   tone?: "light" | "dark";
   /** Tailwind height classes controlling the rendered lockup size. */
   className?: string;
@@ -18,24 +24,28 @@ interface LogoProps {
 /**
  * The college's primary brand mark.
  *
- * When logo.png is present it is rendered untouched — same proportions, same
- * colour, per the brief ("do not recolour the logo"). But the supplied file
- * is flat artwork: its "PRIME" wordmark and crest linework are painted in a
- * navy essentially identical to this site's own navy (confirmed by sampling
- * the PNG — rgb(15,36,63) at full opacity against `--color-navy` #011E3E).
- * On a light background that's exactly right. Placed directly on a navy
- * footer or the navy mobile menu, that same artwork goes navy-on-navy and
- * most of it disappears.
+ * Neither file is ever recoloured, redrawn or re-proportioned — per the
+ * brief. `tone="dark"` (light surfaces, e.g. the header) always renders
+ * `src` plain.
  *
- * Recolouring the file is off the table, and no reversed/white variant was
- * supplied, so `tone="light"` (meaning: this instance sits on a dark surface)
- * gives the mark a small white plate behind it — the logo itself is still
- * untouched pixel-for-pixel, just placed on a background it can actually be
- * read against. `tone="dark"` (light surfaces, e.g. the header) renders it
- * plain, exactly as before.
+ * `tone="light"` (this instance sits on a dark surface) prefers `lightSrc` —
+ * the supplied reversed variant — rendered plain, exactly like the primary
+ * mark on a light surface. Its "PRIME" wordmark and linework are painted
+ * white/gold rather than the primary file's navy, so it reads correctly
+ * against navy without needing anything else done to it.
+ *
+ * If `lightSrc` is absent, this falls back to placing the primary `src` on a
+ * small white plate instead: the primary logo.png's wordmark and crest
+ * linework are painted in a navy essentially identical to this site's own
+ * navy (confirmed by sampling the PNG — rgb(15,36,63) at full opacity against
+ * `--color-navy` #011E3E), so placed directly on a navy field it goes
+ * navy-on-navy and mostly disappears. The plate keeps the file untouched
+ * pixel-for-pixel while making it legible — a safety net, not the primary
+ * path, now that a proper reversed asset exists.
  */
 export function Logo({
   src,
+  lightSrc,
   tone = "dark",
   className,
   asLink = true,
@@ -43,9 +53,23 @@ export function Logo({
 }: LogoProps) {
   const onDarkSurface = tone === "light";
 
-  const mark = src ? (
-    onDarkSurface ? (
-      // The plate carries the height class; the image simply fills it.
+  let mark;
+  if (onDarkSurface && lightSrc) {
+    mark = (
+      <Image
+        src={lightSrc}
+        alt={`${site.name} logo`}
+        width={logoLightIntrinsic.width}
+        height={logoLightIntrinsic.height}
+        priority={priority}
+        className={cn("w-auto object-contain", className)}
+        sizes="220px"
+      />
+    );
+  } else if (onDarkSurface && src) {
+    // Fallback: no reversed variant supplied. The plate carries the height
+    // class; the image simply fills it.
+    mark = (
       <span
         className={cn(
           "inline-flex items-center bg-white p-1.5 sm:p-2",
@@ -62,9 +86,9 @@ export function Logo({
           sizes="220px"
         />
       </span>
-    ) : (
-      // No wrapper needed on a light surface — the height class goes
-      // straight on the image, exactly as before this component changed.
+    );
+  } else if (src) {
+    mark = (
       <Image
         src={src}
         alt={`${site.name} logo`}
@@ -74,10 +98,10 @@ export function Logo({
         className={cn("w-auto object-contain", className)}
         sizes="220px"
       />
-    )
-  ) : (
-    <Wordmark tone={tone} className={className} />
-  );
+    );
+  } else {
+    mark = <Wordmark tone={tone} className={className} />;
+  }
 
   if (!asLink) return mark;
 

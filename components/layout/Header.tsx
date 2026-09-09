@@ -333,6 +333,7 @@ export function Header({
                 open={openKey === item.key}
                 panelId={`${panelBase}-panel-${item.key}`}
                 onClose={() => setOpenKey(null)}
+                currentPath={pathname}
               />
             ))}
         </div>

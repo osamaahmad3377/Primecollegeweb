@@ -13,6 +13,13 @@ import type { NavItem } from "@/lib/types";
 export interface NavPanelLink extends NavItem {
   /** Shown beneath the label inside a mega-menu panel. */
   description?: string;
+  /**
+   * Name of a Lucide icon, resolved to the actual component in
+   * MegaMenu.tsx. Kept as a string here so this data file stays free of
+   * JSX/component imports — the same pattern used for the Why Prime icons
+   * in data/content.ts.
+   */
+  icon: string;
 }
 
 export interface PrimaryNavItem extends NavItem {
@@ -42,10 +49,10 @@ export const primaryNav: PrimaryNavItem[] = [
     panel: {
       heading: "The college",
       links: [
-        { label: "About Us", href: "/about", description: "Our story, vision and values" },
-        { label: "Why Prime", href: "/why-prime", description: "Six commitments we can be held to" },
-        { label: "Campus", href: "/campus", description: "Where the work happens" },
-        { label: "News & Updates", href: "/news", description: "Announcements from across the college" },
+        { label: "About Us", href: "/about", description: "Our story, vision and values", icon: "Landmark" },
+        { label: "Why Prime", href: "/why-prime", description: "Six commitments we can be held to", icon: "Award" },
+        { label: "Campus", href: "/campus", description: "Where the work happens", icon: "Building2" },
+        { label: "News & Updates", href: "/news", description: "Announcements from across the college", icon: "Newspaper" },
       ],
       feature: {
         eyebrow: "Our approach",
@@ -63,12 +70,12 @@ export const primaryNav: PrimaryNavItem[] = [
     panel: {
       heading: "Fields of study",
       links: [
-        { label: "Business", href: "/programs?category=Business", description: "Management, leadership and enterprise" },
-        { label: "Information Technology", href: "/programs?category=Information+Technology", description: "Support, networks, data and development" },
-        { label: "Health", href: "/programs?category=Health", description: "Foundations for careers in care" },
-        { label: "Community Services", href: "/programs?category=Community+Services", description: "Person-centred practice and social impact" },
-        { label: "Hospitality", href: "/programs?category=Hospitality", description: "Service, operations and venue skills" },
-        { label: "Other Programs", href: "/programs?category=Other+Programs", description: "Pathway, foundation and short courses" },
+        { label: "Business", href: "/programs?category=Business", description: "Management, leadership and enterprise", icon: "Briefcase" },
+        { label: "Information Technology", href: "/programs?category=Information+Technology", description: "Support, networks, data and development", icon: "Cpu" },
+        { label: "Health", href: "/programs?category=Health", description: "Foundations for careers in care", icon: "HeartPulse" },
+        { label: "Community Services", href: "/programs?category=Community+Services", description: "Person-centred practice and social impact", icon: "HeartHandshake" },
+        { label: "Hospitality", href: "/programs?category=Hospitality", description: "Service, operations and venue skills", icon: "UtensilsCrossed" },
+        { label: "Other Programs", href: "/programs?category=Other+Programs", description: "Pathway, foundation and short courses", icon: "Compass" },
       ],
       feature: {
         eyebrow: "Not sure yet?",
@@ -86,11 +93,11 @@ export const primaryNav: PrimaryNavItem[] = [
     panel: {
       heading: "Applying to Prime",
       links: [
-        { label: "How to Apply", href: "/admissions", description: "The four-step process, start to finish" },
-        { label: "Entry Requirements", href: "/admissions#requirements", description: "What you will need to provide" },
-        { label: "Dates & Fees", href: "/admissions#dates", description: "Intakes, deadlines and tuition" },
-        { label: "Start an Application", href: "/admissions#apply", description: "Send your details to our team" },
-        { label: "Frequently Asked", href: "/admissions#faq", description: "Answers to the common questions" },
+        { label: "How to Apply", href: "/admissions", description: "The four-step process, start to finish", icon: "ClipboardList" },
+        { label: "Entry Requirements", href: "/admissions#requirements", description: "What you will need to provide", icon: "ListChecks" },
+        { label: "Dates & Fees", href: "/admissions#dates", description: "Intakes, deadlines and tuition", icon: "CalendarDays" },
+        { label: "Start an Application", href: "/admissions#apply", description: "Send your details to our team", icon: "Send" },
+        { label: "Frequently Asked", href: "/admissions#faq", description: "Answers to the common questions", icon: "CircleQuestionMark" },
       ],
       feature: {
         eyebrow: "Admissions open",

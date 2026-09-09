@@ -192,8 +192,40 @@ The information architecture is two levels deep. Top-level items that own a
 cluster of pages (About, Programs, Admissions) open a mega-menu panel with
 descriptions and a promoted card; the rest link straight through. Panels open on
 hover *and* on click, close on Escape with focus returned to the trigger, and
-close on an outside click. A guard stops a stationary cursor from instantly
-re-opening a panel that Escape just closed.
+close on an outside click or a click on the backdrop. A guard stops a
+stationary cursor from instantly re-opening a panel that Escape just closed.
+
+Each panel link (`components/layout/MegaMenu.tsx`) carries a small Lucide icon
+tile — the icon name lives in `data/navigation.ts` (`NavPanelLink.icon`, a
+string) and resolves to the actual component in a lookup map in `MegaMenu.tsx`,
+the same "icon name in data, component in the consumer" pattern already used
+for the Why Prime principles in `data/content.ts`. The promoted card on each
+panel's right is a navy field rather than a cream one — the same "considered
+card" language as the Why Prime grid.
+
+A link is marked as the current page only on an **exact** href match, and only
+for links with no `#` in them. An earlier version compared base paths (stripping
+everything after `#`), which meant every anchor link on a page (e.g. all five
+Admissions links: `/admissions`, `/admissions#requirements`,
+`/admissions#dates`, …) lit up as "current" simultaneously while on
+`/admissions` — technically true but useless as a "you are here" signal.
+Without a scroll-spy there's no reliable way to know which anchored section is
+actually in view, so an anchored link now simply never claims to be current —
+correctly marking zero items beats incorrectly marking five.
+
+Opening a panel dims the page behind it with a backdrop
+(`bg-navy-dark/25 backdrop-blur-[2px]`). Two things to know if you touch this:
+- It's positioned with `top: 100%` of the header's own box, not a
+  `--header-h`/`--utility-h` calc — the header's real height differs between
+  its "top of page" and scrolled/"solid" states (the utility strip collapses
+  to 0 height without the CSS variable itself changing), and a calc-based
+  offset left a visible gap of undimmed page between the header and the scrim
+  whenever a panel opened after scrolling.
+- It needs its own `onClick={onClose}`. It's a DOM descendant of the header's
+  `navRef` div (rendered inside the same "Main bar" container as the panel),
+  so the outside-pointerdown-closes-the-menu handler in `Header.tsx` (which
+  checks `!navRef.current?.contains(target)`) never fires for a click on it —
+  without the explicit handler the backdrop just sits there inertly on click.
 
 A slim utility strip above the main bar carries contact details and secondary
 links, and folds away on scroll. A hairline gold reading-progress bar runs along

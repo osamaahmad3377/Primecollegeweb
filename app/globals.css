@@ -87,7 +87,10 @@
 
   @media (min-width: 1024px) {
     :root {
-      --header-h: 5.5rem;
+      /* A crest-style mark needs more vertical room than a simple wordmark
+         does at the same visual weight — bumped from 5.5rem so the logo can
+         grow on desktop without crowding the header's top/bottom edges. */
+      --header-h: 6rem;
       --utility-h: 2.5rem;
     }
   }

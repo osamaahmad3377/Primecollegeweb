@@ -196,7 +196,7 @@ export function Header({ logoSrc }: { logoSrc: string | null }) {
               priority
               className={cn(
                 "transition-[height] duration-500 motion-reduce:transition-none",
-                solid ? "h-10 lg:h-12" : "h-14 lg:h-16",
+                solid ? "h-11 lg:h-14" : "h-14 lg:h-20",
               )}
             />
 

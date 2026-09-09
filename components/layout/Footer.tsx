@@ -37,7 +37,7 @@ export function Footer({ logoSrc }: { logoSrc: string | null }) {
         <div className="grid gap-12 lg:grid-cols-12 lg:gap-8">
           {/* Identity */}
           <div className="lg:col-span-4">
-            <Logo src={logoSrc} tone="light" className="h-16 lg:h-20" />
+            <Logo src={logoSrc} tone="light" className="h-16 lg:h-20 xl:h-24" />
             <p className="mt-6 max-w-[38ch] text-sm leading-relaxed text-navy-muted">
               {site.foundingStatement}
             </p>

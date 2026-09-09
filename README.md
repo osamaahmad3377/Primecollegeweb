@@ -109,6 +109,14 @@ Deploy target is Vercel. Set `NEXT_PUBLIC_SITE_URL` in the project settings
 before the first production deploy — it drives canonical URLs, Open Graph tags,
 `sitemap.xml` and `robots.txt`. See `.env.example`.
 
+**Analytics**: `@vercel/analytics` is installed and `<Analytics />` is mounted
+in `app/layout.tsx`. It's page-view tracking only, no cookies — nothing to add
+to the privacy policy's cookie copy. It only reports anything once the site is
+deployed on Vercel with Web Analytics enabled for the project; locally (and on
+any other host) it's a harmless no-op — the browser console will log a message
+about enabling Web Analytics, which is the library's own expected behaviour,
+not an error to chase.
+
 ---
 
 ## Architecture

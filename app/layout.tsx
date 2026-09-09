@@ -1,4 +1,5 @@
 import type { Metadata, Viewport } from "next";
+import { Analytics } from "@vercel/analytics/next";
 import { Inter, JetBrains_Mono, Poppins } from "next/font/google";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
@@ -121,6 +122,15 @@ export default function RootLayout({
 
         <JsonLd data={organisationJsonLd(Boolean(logoSrc))} />
         <JsonLd data={websiteJsonLd()} />
+
+        {/*
+          Vercel Web Analytics — page-view counts only, no cookies, so it
+          needs no entry in the cookie/consent copy on the privacy policy.
+          It is a no-op everywhere except a production deploy actually
+          served from Vercel; harmless (and silent) in local dev and in any
+          other hosting environment.
+        */}
+        <Analytics />
       </body>
     </html>
   );
